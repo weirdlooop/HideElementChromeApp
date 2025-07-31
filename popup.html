@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Element Hider</title>
+    <style>
+      /* Basic styling for CSP compliance */
+      body {
+        width: 350px; /* Fixed width for the popup */
+        margin: 0; /* Remove default body margin */
+        padding: 0; /* Remove default body padding */
+        font-family: 'Inter', sans-serif;
+        background-color: #f0f4f8; /* Light blue-gray background for the body */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+      }
+      .container {
+        background-color: #ffffff;
+        padding: 0 9px; /* Reduced padding for a more compact look */
+        border-radius: 8px;
+        box-shadow:
+          0 10px 15px -3px rgba(0, 0, 0, 0.1),
+          0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        width: 100%; /* Take full width of the body */
+        box-sizing: border-box; /* Include padding in width calculation */
+      }
+      h1 {
+        font-size: 1.25rem; /* text-xl - smaller title */
+        font-weight: 700; /* font-bold */
+        color: #1f2937; /* text-gray-800 */
+        margin-bottom: 16px; /* mb-4 */
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px; /* Space between logo and text */
+      }
+      .logo {
+        width: 32px; /* Size for the logo */
+        height: 32px;
+        vertical-align: middle;
+      }
+      h2 {
+        font-size: 1.125rem; /* text-lg */
+        font-weight: 600; /* font-semibold */
+        color: #1f2937; /* text-gray-800 */
+        margin-bottom: 12px; /* mb-3 */
+      }
+      input[type='text'] {
+        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* shadow-sm */
+        border-width: 1px; /* border */
+        border-color: #d1d5db; /* border-gray-300 */
+        border-radius: 0.375rem; /* rounded-md */
+        display: block;
+        width: 100%;
+        padding: 8px 12px; /* px-3 py-2 */
+        font-size: 0.875rem; /* sm:text-sm */
+        line-height: 1.25rem;
+        outline: none; /* focus:outline-none */
+      }
+      input[type='text']:focus {
+        border-color: #3b82f6; /* focus:border-blue-500 */
+        box-shadow: 0 0 0 1px #3b82f6; /* focus:ring-blue-500 */
+      }
+      button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center; /* Added for full width buttons */
+        padding: 8px 16px; /* px-4 py-2 */
+        border-width: 1px;
+        border-color: transparent;
+        font-size: 0.875rem; /* text-sm */
+        font-weight: 500; /* font-medium */
+        border-radius: 0.375rem; /* rounded-md */
+        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* shadow-sm */
+        color: #ffffff;
+        background-color: #2563eb; /* bg-blue-600 */
+        cursor: pointer;
+        transition: background-color 0.15s ease-in-out;
+        outline: none; /* focus:outline-none */
+      }
+      button:hover {
+        background-color: #1d4ed8; /* hover:bg-blue-700 */
+      }
+      button:focus {
+        box-shadow:
+          0 0 0 2px #ffffff,
+          0 0 0 4px #3b82f6; /* focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 */
+      }
+
+      .flex-1 {
+        flex: 1 1 0%;
+      } /* flex-1 */
+      .flex {
+        display: flex;
+      }
+      .flex-col {
+        flex-direction: column;
+      }
+      .items-center {
+        align-items: center;
+      }
+      .justify-center {
+        justify-content: center;
+      }
+      .space-x-2 > *:not(:first-child) {
+        margin-left: 0.5rem;
+      } /* space-x-2 */
+      .space-y-3 > *:not(:first-child) {
+        margin-top: 0.75rem;
+      } /* space-y-3 */
+      .space-y-2 > *:not(:first-child) {
+        margin-top: 0.5rem;
+      } /* space-y-2 */
+      .mb-6 {
+        margin-bottom: 1.5rem;
+      } /* mb-6 */
+      .mb-4 {
+        margin-bottom: 1rem;
+      } /* mb-4 */
+      .mb-3 {
+        margin-bottom: 0.75rem;
+      } /* mb-3 */
+      .mb-1 {
+        margin-bottom: 0.25rem;
+      } /* mb-1 */
+      .mr-2 {
+        margin-right: 0.5rem;
+      } /* mr-2 */
+      .pb-4 {
+        padding-bottom: 1rem;
+      } /* pb-4 */
+      .w-full {
+        width: 100%;
+      }
+      .max-w-sm {
+        max-width: 20rem;
+      }
+      .max-w-md {
+        max-width: 28rem;
+      }
+      .block {
+        display: block;
+      }
+      .text-sm {
+        font-size: 0.875rem;
+      }
+      .font-medium {
+        font-weight: 500;
+      }
+      .font-semibold {
+        font-weight: 600;
+      }
+      .text-gray-700 {
+        color: #374151;
+      }
+      .text-gray-800 {
+        color: #1f2937;
+      }
+      .text-center {
+        text-align: center;
+      }
+      .rounded-lg {
+        border-radius: 0.5rem;
+      }
+      .shadow-lg {
+        box-shadow:
+          0 10px 15px -3px rgba(0, 0, 0, 0.1),
+          0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      }
+      .border-b {
+        border-bottom-width: 1px;
+      }
+      .border-gray-200 {
+        border-color: #e5e7eb;
+      }
+      .flex-grow {
+        flex-grow: 1;
+      }
+
+      .remove-btn {
+        margin-left: 0.5rem; /* ml-2 */
+        padding: 4px 8px; /* px-2 py-1 */
+        font-size: 0.75rem; /* text-xs */
+        font-weight: 500; /* font-medium */
+        border-radius: 9999px; /* rounded-full */
+        color: #b91c1c; /* text-red-700 */
+        background-color: #fee2e2; /* bg-red-100 */
+        transition: background-color 0.15s ease-in-out;
+        border: none; /* No border for remove button */
+        cursor: pointer;
+      }
+      .remove-btn:hover {
+        background-color: #fecaca; /* hover:bg-red-200 */
+      }
+      .remove-btn:focus {
+        box-shadow:
+          0 0 0 2px #ffffff,
+          0 0 0 4px #ef4444; /* focus:ring-2 focus:ring-offset-2 focus:ring-red-500 */
+      }
+      .list-item {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start; /* Align content to the start */
+        padding: 8px; /* p-2 */
+        margin-top: 4px; /* my-1 */
+        margin-bottom: 4px; /* my-1 */
+        background-color: #f9fafb; /* bg-gray-50 */
+        border-radius: 0.375rem; /* rounded-md */
+        color: #374151; /* text-gray-700 */
+        font-size: 0.875rem; /* text-sm */
+      }
+      .list-item-content {
+        display: flex;
+        align-items: center;
+        width: 100%; /* Take full width to allow ml-auto on controls */
+      }
+      .list-item-controls {
+        display: flex;
+        align-items: center;
+        margin-left: auto; /* Pushes controls to the right */
+      }
+      .visibility-icon {
+        font-size: 1.1em; /* Slightly larger icon */
+        vertical-align: middle;
+        cursor: pointer; /* Indicate it's clickable */
+        margin-right: 0.5rem; /* Space between icon and remove button */
+      }
+      .icon-not-found {
+        color: #999999; /* Medium gray for not found icon */
+      }
+      .input-hint {
+        font-size: 0.75rem; /* text-xs */
+        color: #6b7280; /* text-gray-500 */
+        margin-top: 0.25rem; /* mt-1 */
+        margin-bottom: 0.5rem; /* mb-2 */
+        display: none; /* Hidden by default */
+      }
+    </style>
+  </head>
+  <body class="flex flex-col items-center justify-center bg-gray-100">
+    <div class="container">
+      <h1>
+        <img src="icons/icon128.png" alt="Element Hider Logo" class="logo" />
+        Element Hider
+      </h1>
+
+      <!-- Single Input for ID or Class -->
+      <div class="mb-6">
+        <div class="flex mb-3">
+          <input
+            type="text"
+            id="elementInput"
+            placeholder="e.g., #myId or .myClass"
+            style="flex-grow: 1; margin-right: 0.5rem"
+          />
+          <button id="addElementButton">Add</button>
+        </div>
+        <p id="inputHint" class="input-hint">
+          Input must start with "#" for ID or "." for Class.
+        </p>
+      </div>
+
+      <!-- Combined List of Elements -->
+      <div class="mb-6">
+        <h2>Saved Elements</h2>
+        <div id="elementList" class="space-y-2">
+          <!-- Elements will be dynamically added here -->
+        </div>
+      </div>
+    </div>
+
+    <script src="popup.js"></script>
+  </body>
+</html>
